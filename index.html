@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tweede brein</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#c9778f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tweede brein" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>Tweede brein</h1>
+      <div class="status" id="status" aria-live="polite"></div>
+    </header>
+
+    <section class="dump">
+      <textarea
+        id="dumpInput"
+        class="dump__input"
+        placeholder="Wat zit er in je hoofd?"
+        rows="3"
+        autocomplete="off"
+      ></textarea>
+
+      <div class="dump__buttons">
+        <button class="btn btn--taak" data-type="taak">
+          <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 6h11M8 12h11M8 18h8" />
+            <path d="M4 6h.01M4 12h.01M4 18h.01" />
+          </svg>
+          <span>Taak</span>
+        </button>
+        <button class="btn btn--afspraak" data-type="afspraak">
+          <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5.5" width="16" height="14.5" rx="2.5" />
+            <path d="M4 10h16M8 3.5v3M16 3.5v3" />
+          </svg>
+          <span>Afspraak</span>
+        </button>
+        <button class="btn btn--later" data-type="later">
+          <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12.5" r="8" />
+            <path d="M12 8.5v4l2.6 2" />
+          </svg>
+          <span>Later</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="today">
+      <h2>Vandaag</h2>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="empty" hidden>Niks op je lijst. Rustig aan.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden>
+    <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
+    <span class="toast__text" id="toastText">Mooi gedaan</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
