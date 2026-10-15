@@ -38,6 +38,20 @@
         autocomplete="off"
       ></textarea>
 
+      <div class="dump__date">
+        <svg class="dump__date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="5.5" width="16" height="14.5" rx="2.5" />
+          <path d="M4 10h16M8 3.5v3M16 3.5v3" />
+        </svg>
+        <label for="dateInput" class="dump__date-label">Voor wanneer?</label>
+        <input type="date" id="dateInput" class="dump__date-input" />
+        <button type="button" id="dateClear" class="dump__date-clear" hidden aria-label="Datum wissen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+
       <div class="dump__buttons">
         <button class="btn btn--taak" data-type="taak">
           <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">

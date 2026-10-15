@@ -22,6 +22,8 @@ const TYPE_ICON = {
 };
 
 const dumpInput = document.getElementById("dumpInput");
+const dateInput = document.getElementById("dateInput");
+const dateClear = document.getElementById("dateClear");
 const list = document.getElementById("list");
 const empty = document.getElementById("empty");
 const statusEl = document.getElementById("status");
@@ -99,12 +101,15 @@ function addItem(type) {
   const text = dumpInput.value.trim();
   if (!text) return;
 
+  const chosenDate = dateInput.value;
+  const due = chosenDate && chosenDate > todayStr() ? chosenDate : todayStr();
+
   const items = loadItems();
   items.unshift({
     id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
     text,
     type,
-    due: todayStr(),
+    due,
     done: false,
     postponed: false,
   });
@@ -112,9 +117,21 @@ function addItem(type) {
   addPoints(POINTS_ADD);
 
   dumpInput.value = "";
+  clearDate();
   dumpInput.focus();
   render();
 }
+
+function clearDate() {
+  dateInput.value = "";
+  dateClear.hidden = true;
+}
+
+dateInput.min = todayStr();
+dateInput.addEventListener("change", () => {
+  dateClear.hidden = !dateInput.value;
+});
+dateClear.addEventListener("click", clearDate);
 
 function markDone(id, cardEl) {
   const items = loadItems();

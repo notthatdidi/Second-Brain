@@ -95,6 +95,58 @@ html, body {
   color: #c7b9c3;
 }
 
+.dump__date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: 12px;
+}
+
+.dump__date-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--text-soft);
+  flex-shrink: 0;
+}
+
+.dump__date-label {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.dump__date-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--text);
+  min-width: 0;
+}
+
+.dump__date-clear {
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dump__date-clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.dump__date-clear[hidden] {
+  display: none;
+}
+
 .dump__buttons {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
