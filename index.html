@@ -26,7 +26,15 @@
   <main class="app">
     <header class="app__header">
       <h1>Tweede brein</h1>
-      <div class="status" id="status" aria-live="polite"></div>
+      <div class="app__header-right">
+        <button type="button" id="notifyToggle" class="notify-toggle" aria-label="Herinneringen uitgeschakeld">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10Z" />
+            <path d="M10 19a2 2 0 0 0 4 0" />
+          </svg>
+        </button>
+        <div class="status" id="status" aria-live="polite"></div>
+      </div>
     </header>
 
     <section class="dump">
@@ -92,6 +100,14 @@
       </div>
     </section>
   </main>
+
+  <div id="overdueOverlay" class="overdue-overlay" hidden>
+    <div class="overdue-overlay__card">
+      <h2 class="overdue-overlay__title">Dit is blijven liggen</h2>
+      <p class="overdue-overlay__sub">Even een keuze maken voor je verder kan.</p>
+      <ul id="overdueList" class="overdue-list"></ul>
+    </div>
+  </div>
 
   <div id="toast" class="toast" hidden>
     <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

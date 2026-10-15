@@ -43,7 +43,7 @@ html, body {
 
 .app__header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
 }
@@ -54,6 +54,38 @@ html, body {
   font-size: 1.7rem;
   margin: 0;
   color: var(--text);
+}
+
+.app__header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notify-toggle {
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.notify-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.notify-toggle--on {
+  color: var(--rose-deep);
+}
+
+.notify-toggle[hidden] {
+  display: none;
 }
 
 .status {
@@ -395,4 +427,134 @@ html, body {
 @keyframes toast-in {
   0% { opacity: 0; transform: translateX(-50%) translateY(8px); }
   100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.overdue-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(63, 51, 64, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 20;
+  padding: 16px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+.overdue-overlay[hidden] {
+  display: none;
+}
+
+.overdue-overlay__card {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 -8px 30px rgba(63, 51, 64, 0.3);
+  animation: overlay-in 0.25s ease;
+}
+
+@keyframes overlay-in {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.overdue-overlay__title {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+
+.overdue-overlay__sub {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  margin: 0 0 18px;
+}
+
+.overdue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.overdue-item {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.overdue-item__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.overdue-item__type {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--mauve);
+}
+
+.overdue-item__text {
+  flex: 1;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.overdue-item__due {
+  font-size: 0.78rem;
+  color: var(--rose-deep);
+  margin: -8px 0 0 28px;
+}
+
+.overdue-item__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.overdue-item__btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 0;
+  min-height: 48px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.overdue-item__btn--done {
+  background: var(--sage);
+}
+
+.overdue-item__btn--reschedule {
+  background: var(--sand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.overdue-item__btn--reschedule input[type="date"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
 }

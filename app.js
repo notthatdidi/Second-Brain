@@ -3,6 +3,11 @@ const POINTS_KEY = "tweedeBrein.points";
 const STREAK_KEY = "tweedeBrein.streak";
 const HISTORY_KEY = "tweedeBrein.history";
 
+// Wordt ingevuld na het deployen van de Cloudflare Worker.
+const PUSH_SERVER_URL = "https://tweede-brein-push.content-bydidii-ed5.workers.dev";
+const VAPID_PUBLIC_KEY =
+  "BNOpO7EPE3WHFC5G0kaoSzbKeXpsjorXCLHa_dWei8tCerkgJRIuzxJ73YOaUzKXLCUD1ph8EBUYvXGwyaaL3V4";
+
 const DAY_LABELS = ["zo", "ma", "di", "wo", "do", "vr", "za"];
 
 const POINTS_ADD = 1;
@@ -34,6 +39,9 @@ const toast = document.getElementById("toast");
 const toastText = document.getElementById("toastText");
 const progressChart = document.getElementById("progressChart");
 const streakNum = document.getElementById("streakNum");
+const overdueOverlay = document.getElementById("overdueOverlay");
+const overdueList = document.getElementById("overdueList");
+const notifyToggle = document.getElementById("notifyToggle");
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -206,6 +214,71 @@ function postponeToTomorrow(id, cardEl) {
   setTimeout(render, 220);
 }
 
+function rescheduleItem(id, newDate) {
+  if (!newDate) return;
+  const items = loadItems();
+  const item = items.find((i) => i.id === id);
+  if (!item) return;
+  item.due = newDate;
+  item.postponed = true;
+  saveItems(items);
+  render();
+}
+
+function formatDueDate(due) {
+  const [y, m, d] = due.split("-");
+  return `${d}-${m}-${y}`;
+}
+
+function renderOverdueOverlay() {
+  const today = todayStr();
+  const overdue = loadItems().filter((i) => !i.done && i.due < today);
+
+  if (overdue.length === 0) {
+    overdueOverlay.hidden = true;
+    overdueList.innerHTML = "";
+    return;
+  }
+
+  overdueOverlay.hidden = false;
+  overdueList.innerHTML = "";
+
+  for (const item of overdue) {
+    const li = document.createElement("li");
+    li.className = "overdue-item";
+    li.innerHTML = `
+      <div class="overdue-item__top">
+        <svg class="overdue-item__type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          ${TYPE_ICON[item.type] || TYPE_ICON.taak}
+        </svg>
+        <span class="overdue-item__text"></span>
+      </div>
+      <div class="overdue-item__due"></div>
+      <div class="overdue-item__actions">
+        <button class="overdue-item__btn overdue-item__btn--done">Gedaan</button>
+        <label class="overdue-item__btn overdue-item__btn--reschedule">
+          Nieuwe datum
+          <input type="date" />
+        </label>
+      </div>
+    `;
+
+    li.querySelector(".overdue-item__text").textContent = item.text;
+    li.querySelector(".overdue-item__due").textContent = `Gepland voor ${formatDueDate(item.due)}`;
+    li.querySelector(".overdue-item__btn--done").addEventListener("click", () =>
+      markDone(item.id, li)
+    );
+
+    const rescheduleInput = li.querySelector('input[type="date"]');
+    rescheduleInput.min = today;
+    rescheduleInput.addEventListener("change", () =>
+      rescheduleItem(item.id, rescheduleInput.value)
+    );
+
+    overdueList.appendChild(li);
+  }
+}
+
 function showToast(gained) {
   const phrase = DONE_PHRASES[Math.floor(Math.random() * DONE_PHRASES.length)];
   toastText.textContent = `${phrase} · +${gained}`;
@@ -254,6 +327,7 @@ function render() {
 
   renderStatus();
   renderProgress();
+  renderOverdueOverlay();
 }
 
 document.querySelectorAll(".dump__buttons .btn").forEach((btn) => {
@@ -266,4 +340,72 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   });
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = atob(base64);
+  return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+}
+
+async function getExistingSubscription() {
+  if (!("serviceWorker" in navigator)) return null;
+  const reg = await navigator.serviceWorker.ready;
+  return reg.pushManager.getSubscription();
+}
+
+async function updateNotifyToggle() {
+  if (!notifyToggle) return;
+  const sub = await getExistingSubscription();
+  notifyToggle.classList.toggle("notify-toggle--on", !!sub);
+  notifyToggle.setAttribute(
+    "aria-label",
+    sub ? "Herinneringen staan aan" : "Herinneringen uitgeschakeld"
+  );
+}
+
+async function enablePush() {
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") return;
+
+  const reg = await navigator.serviceWorker.ready;
+  const subscription = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+  });
+
+  await fetch(`${PUSH_SERVER_URL}/subscribe`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(subscription),
+  });
+}
+
+async function disablePush() {
+  const sub = await getExistingSubscription();
+  if (!sub) return;
+
+  await fetch(`${PUSH_SERVER_URL}/unsubscribe`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ endpoint: sub.endpoint }),
+  }).catch(() => {});
+
+  await sub.unsubscribe();
+}
+
+if (notifyToggle && "serviceWorker" in window.navigator && "PushManager" in window) {
+  notifyToggle.addEventListener("click", async () => {
+    const sub = await getExistingSubscription();
+    if (sub) {
+      await disablePush();
+    } else {
+      await enablePush();
+    }
+    updateNotifyToggle();
+  });
+  updateNotifyToggle();
+} else if (notifyToggle) {
+  notifyToggle.hidden = true;
 }

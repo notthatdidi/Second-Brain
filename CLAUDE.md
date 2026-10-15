@@ -20,6 +20,11 @@ op een iPhone.
 - Begin met gewone HTML, CSS en JavaScript, zonder zware frameworks
 - Moet als app op het beginscherm van een iPhone kunnen (PWA)
 - Gegevens worden voorlopig lokaal op de telefoon bewaard
+- Pushmeldingen (ook als de app dicht is) lopen via een kleine
+  Cloudflare Worker in `worker/` — stuurt elke dag om 08:00 (NL-tijd)
+  een vaste herinnering naar wie zich heeft aangemeld. Er gaat geen
+  persoonlijke data (taken, teksten) naar die server, alleen het
+  push-abonnement van het toestel zelf. Zie `worker/README.md`.
 
 ## Fases
 1. Dumpscherm + lijst "vandaag" met knoppen Gedaan / Morgen + beloning
