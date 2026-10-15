@@ -1,6 +1,9 @@
 const STORAGE_KEY = "tweedeBrein.items";
 const POINTS_KEY = "tweedeBrein.points";
 const STREAK_KEY = "tweedeBrein.streak";
+const HISTORY_KEY = "tweedeBrein.history";
+
+const DAY_LABELS = ["zo", "ma", "di", "wo", "do", "vr", "za"];
 
 const POINTS_ADD = 1;
 const POINTS_DONE = 3;
@@ -29,6 +32,8 @@ const empty = document.getElementById("empty");
 const statusEl = document.getElementById("status");
 const toast = document.getElementById("toast");
 const toastText = document.getElementById("toastText");
+const progressChart = document.getElementById("progressChart");
+const streakNum = document.getElementById("streakNum");
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -89,12 +94,51 @@ function bumpStreakOncePerDay() {
 function renderStatus() {
   const points = loadPoints();
   const level = levelFor(points);
-  const streak = loadStreak();
-  const streakCount = streak.count;
+  statusEl.innerHTML = `<strong>Niveau ${level}</strong> · ${points} punten`;
+}
 
-  statusEl.innerHTML = `<strong>Niveau ${level}</strong> · ${points} punten<br>${streakCount} ${
-    streakCount === 1 ? "dag" : "dagen"
-  } op rij`;
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function logCompletion() {
+  const history = loadHistory();
+  const today = todayStr();
+  history[today] = (history[today] || 0) + 1;
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+function renderProgress() {
+  const history = loadHistory();
+  const today = new Date();
+  const days = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    days.push({ key, count: history[key] || 0, isToday: i === 0, weekday: d.getDay() });
+  }
+
+  const maxCount = Math.max(1, ...days.map((d) => d.count));
+
+  progressChart.innerHTML = "";
+  for (const day of days) {
+    const barHeight = Math.round((day.count / maxCount) * 44) + 6;
+    const bar = document.createElement("div");
+    bar.className = "progress-bar" + (day.isToday ? " progress-bar--today" : "");
+    bar.innerHTML = `
+      <div class="progress-bar__fill" style="height:${barHeight}px"></div>
+      <span class="progress-bar__day">${DAY_LABELS[day.weekday]}</span>
+    `;
+    progressChart.appendChild(bar);
+  }
+
+  streakNum.textContent = loadStreak().count;
 }
 
 function addItem(type) {
@@ -143,6 +187,7 @@ function markDone(id, cardEl) {
   const gained = POINTS_DONE + (item.postponed ? POINTS_BONUS_POSTPONED : 0);
   addPoints(gained);
   bumpStreakOncePerDay();
+  logCompletion();
   showToast(gained);
 
   cardEl.classList.add("item--leaving");
@@ -208,6 +253,7 @@ function render() {
   }
 
   renderStatus();
+  renderProgress();
 }
 
 document.querySelectorAll(".dump__buttons .btn").forEach((btn) => {

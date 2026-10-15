@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Noto+Serif:wght@500;600&display=swap"
     rel="stylesheet"
   />
 
@@ -81,6 +81,15 @@
       <h2>Vandaag</h2>
       <ul id="list" class="list"></ul>
       <p id="empty" class="empty" hidden>Niks op je lijst. Rustig aan.</p>
+    </section>
+
+    <section class="progress-card">
+      <span class="label-caps">Deze week</span>
+      <div class="progress-card__chart" id="progressChart"></div>
+      <div class="progress-card__streak">
+        <span class="progress-card__streak-num" id="streakNum">0</span>
+        <span class="progress-card__streak-text">dagen op rij</span>
+      </div>
     </section>
   </main>
 

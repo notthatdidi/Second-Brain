@@ -32,22 +32,29 @@ op een iPhone.
 - Sfeer: volwassen, chic en een beetje girly. Rustig, overzichtelijk,
   niet kinderlijk of speels. Denk aan een mooi notitieboekje of een
   stijlvolle planner-app.
-- Kleurenpalet (gedempt, roze als hoofdkleur):
-  - Achtergrond: #FBF4F2 (warm crème)
-  - Kaarten: #FFFFFF met zachte schaduw
-  - Hoofdkleur stofroze: #E3A5B5
-  - Donkerder roze (accenten, knoppen): #C9778F
+- Kleurenpalet (gedempt, warm, roze als hoofdkleur — richting washi/
+  papier-tinten, geïnspireerd op een "Hanami"-achtig ontwerp):
+  - Achtergrond: #FBF4F2 (washi/warm crème)
+  - Kaarten: #FFFFFF / #FDF9F3 met zachte schaduw
+  - Hoofdkleur stofroze: #E3A5B5 (petal)
+  - Donkerder roze (accenten, knoppen): #C9778F (sakura)
+  - Diep roze/bordeaux voor nadruk (bv. belangrijk, grafiek): #963D60
   - Mauve: #B9A3C4
   - Salie (voor "Gedaan"): #A9C2AE
   - Zand (voor "Morgen"): #E8D5C4
   - Tekst: #3F3340 (diep aubergine)
-- Lettertypen: een elegante serif voor titels (bijvoorbeeld Playfair
-  Display of DM Serif Display), een rustig schreefloos lettertype voor
-  de rest (bijvoorbeeld DM Sans of Inter). Laad ze via Google Fonts.
+- Lettertypen: elegante serif voor titels (Noto Serif of Playfair
+  Display), rustig schreefloos voor de rest (DM Sans of Work Sans).
+  Sectiekopjes/labels mogen klein, uppercase en met letterspatiëring
+  (zoals "SKIN SCORE" in referentie-apps). Laad via Google Fonts.
 - Afgeronde hoeken, dunne lijntjes, zachte schaduwen, veel witruimte
 - Grote knoppen (minstens 56px hoog) voor makkelijk duimgebruik
 - Gebruik subtiele lijniconen, geen cartoon-emoji
 - Tekst in het Nederlands, kort, warm en volwassen van toon
+- Voortgang mag visueel: een rustige kaart met een klein grafiekje
+  (bv. afgeronde taken per dag, laatste week) en de streak prominent
+  erbij — net als "Skin Score" + "Streak" kaarten in referentie-apps,
+  maar zonder felle gradients of cartooneske illustraties
 
 ## Puntensysteem
 - 1 punt voor starten aan een taak, 3 punten voor afronden

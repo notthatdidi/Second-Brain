@@ -1,8 +1,10 @@
 :root {
   --bg: #fbf4f2;
   --surface: #ffffff;
+  --surface-alt: #fdf9f3;
   --pink: #e3a5b5;
   --pink-dark: #c9778f;
+  --rose-deep: #963d60;
   --mauve: #b9a3c4;
   --sage: #a9c2ae;
   --sand: #e8d5c4;
@@ -11,7 +13,7 @@
   --border: #f0e4e1;
   --radius: 18px;
   --shadow: 0 4px 16px rgba(63, 51, 64, 0.06);
-  --font-title: "Playfair Display", Georgia, serif;
+  --font-title: "Noto Serif", Georgia, serif;
   --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -275,6 +277,85 @@ html, body {
   color: var(--text-soft);
   font-size: 0.98rem;
   padding: 24px 0;
+}
+
+.label-caps {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.progress-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.progress-card__chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 64px;
+}
+
+.progress-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  height: 100%;
+}
+
+.progress-bar__fill {
+  width: 100%;
+  max-width: 22px;
+  border-radius: 6px;
+  background: var(--pink);
+}
+
+.progress-bar--today .progress-bar__fill {
+  background: var(--rose-deep);
+}
+
+.progress-bar__day {
+  font-size: 0.68rem;
+  color: var(--text-soft);
+}
+
+.progress-bar--today .progress-bar__day {
+  color: var(--rose-deep);
+  font-weight: 700;
+}
+
+.progress-card__streak {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.progress-card__streak-num {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+}
+
+.progress-card__streak-text {
+  font-size: 0.9rem;
+  color: var(--text-soft);
 }
 
 .toast {
