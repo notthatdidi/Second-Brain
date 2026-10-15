@@ -25,6 +25,13 @@ op een iPhone.
   een vaste herinnering naar wie zich heeft aangemeld. Er gaat geen
   persoonlijke data (taken, teksten) naar die server, alleen het
   push-abonnement van het toestel zelf. Zie `worker/README.md`.
+- De knop "Automatisch" (fase 4) stuurt de tekst van die ene dump naar
+  dezelfde Worker, die 'm met Cloudflare Workers AI classificeert als
+  Taak/Afspraak/Later. Alleen bij dit knopje verlaat je tekst het
+  toestel — bij de gewone 3 knoppen niet. Simpele datums ("morgen",
+  "12 november") worden met gewone code uitgerekend, niet door de AI
+  (betrouwbaarder); weekdag-datums ("volgende week dinsdag") laat de
+  AI bewust leeg in plaats van te raden.
 
 ## Fases
 1. Dumpscherm + lijst "vandaag" met knoppen Gedaan / Morgen + beloning

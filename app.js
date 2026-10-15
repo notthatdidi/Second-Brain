@@ -3,7 +3,7 @@ const POINTS_KEY = "tweedeBrein.points";
 const STREAK_KEY = "tweedeBrein.streak";
 const HISTORY_KEY = "tweedeBrein.history";
 
-// Wordt ingevuld na het deployen van de Cloudflare Worker.
+// Cloudflare Worker: verstuurt pushmeldingen en classificeert dumps met AI.
 const PUSH_SERVER_URL = "https://tweede-brein-push.content-bydidii-ed5.workers.dev";
 const VAPID_PUBLIC_KEY =
   "BNOpO7EPE3WHFC5G0kaoSzbKeXpsjorXCLHa_dWei8tCerkgJRIuzxJ73YOaUzKXLCUD1ph8EBUYvXGwyaaL3V4";
@@ -42,6 +42,7 @@ const streakNum = document.getElementById("streakNum");
 const overdueOverlay = document.getElementById("overdueOverlay");
 const overdueList = document.getElementById("overdueList");
 const notifyToggle = document.getElementById("notifyToggle");
+const autoBtn = document.getElementById("autoBtn");
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -149,12 +150,12 @@ function renderProgress() {
   streakNum.textContent = loadStreak().count;
 }
 
-function addItem(type) {
+function addItem(type, dueOverride) {
   const text = dumpInput.value.trim();
   if (!text) return;
 
   const chosenDate = dateInput.value;
-  const due = chosenDate && chosenDate > todayStr() ? chosenDate : todayStr();
+  const due = dueOverride || (chosenDate && chosenDate > todayStr() ? chosenDate : todayStr());
 
   const items = loadItems();
   items.unshift({
@@ -330,9 +331,42 @@ function render() {
   renderOverdueOverlay();
 }
 
-document.querySelectorAll(".dump__buttons .btn").forEach((btn) => {
+document.querySelectorAll(".dump__buttons .btn[data-type]").forEach((btn) => {
   btn.addEventListener("click", () => addItem(btn.dataset.type));
 });
+
+async function classifyAndAdd() {
+  const text = dumpInput.value.trim();
+  if (!text) return;
+
+  autoBtn.disabled = true;
+  autoBtn.classList.add("btn--loading");
+
+  let type = "taak";
+  let due = null;
+
+  try {
+    const res = await fetch(`${PUSH_SERVER_URL}/classify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, today: todayStr() }),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      if (["taak", "afspraak", "later"].includes(result.type)) type = result.type;
+      if (typeof result.due === "string") due = result.due;
+    }
+  } catch {
+    // Geen internet of de server reageert niet: val terug op "taak" zodat
+    // de dump nooit verloren gaat.
+  }
+
+  addItem(type, due);
+  autoBtn.disabled = false;
+  autoBtn.classList.remove("btn--loading");
+}
+
+autoBtn.addEventListener("click", classifyAndAdd);
 
 render();
 

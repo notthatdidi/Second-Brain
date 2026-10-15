@@ -15,3 +15,6 @@ id = "9567ad3613874148b596adb84901fbef"
 
 [vars]
 VAPID_PUBLIC_KEY = "BNOpO7EPE3WHFC5G0kaoSzbKeXpsjorXCLHa_dWei8tCerkgJRIuzxJ73YOaUzKXLCUD1ph8EBUYvXGwyaaL3V4"
+
+[ai]
+binding = "AI"

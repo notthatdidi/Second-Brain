@@ -183,7 +183,7 @@ html, body {
 
 .dump__buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
@@ -218,6 +218,29 @@ html, body {
 .btn--taak { color: var(--pink-dark); }
 .btn--afspraak { color: var(--mauve); }
 .btn--later { color: var(--text-soft); }
+
+.btn--auto {
+  background: var(--surface-alt);
+  border-color: var(--rose-deep);
+  color: var(--rose-deep);
+}
+
+.btn--auto[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn--auto .btn__icon {
+  animation: none;
+}
+
+.btn--auto.btn--loading .btn__icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 .today h2 {
   font-family: var(--font-title);
